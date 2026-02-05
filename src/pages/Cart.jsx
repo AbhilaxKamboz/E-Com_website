@@ -55,7 +55,7 @@ export default function Cart() {
       <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
 
       {cart.length === 0 ? (
-        <div className="text-center mt-20">
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
           <p className="text-xl mb-4">🛒 Your cart is empty</p>
           <Link
             to="/products"
