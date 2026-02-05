@@ -5,80 +5,105 @@ import { useCart } from "../context/CartContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const {addToCart}=useCart();
+  const { addToCart } = useCart();
 
-  // Product find from URL
   const product = products.find(p => p.id === Number(id));
-
-  // Quantity state
   const [qty, setQty] = useState(1);
 
   if (!product) {
     return (
-      <div className="p-10 text-center text-red-600">
+      <div className="min-h-[60vh] flex items-center justify-center text-red-600 text-lg">
         Product not found
       </div>
     );
   }
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
       {/* BACK LINK */}
-      <Link to="/products" className="text-blue-600 mb-6 inline-block">
+      <Link
+        to="/products"
+        className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline mb-6"
+      >
         ← Back to Products
       </Link>
 
       {/* MAIN LAYOUT */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14">
 
-        {/* LEFT: IMAGE */}
-        <div className="border rounded-lg p-4 bg-white">
+        {/* IMAGE SECTION */}
+        <div className="
+          bg-white border rounded-2xl
+          p-4 sm:p-6
+          flex items-center justify-center
+          shadow-sm
+        ">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-96 object-contain"
+            className="
+              w-full max-h-[420px]
+              object-contain
+              hover:scale-105
+              transition duration-300
+            "
           />
         </div>
 
-        {/* RIGHT: DETAILS */}
-        <div>
+        {/* DETAILS SECTION */}
+        <div className="flex flex-col">
 
           {/* CATEGORY */}
-          <span className="text-sm text-blue-600 uppercase">
+          <span className="
+            text-xs uppercase tracking-wider
+            text-blue-600 font-semibold
+          ">
             {product.category}
           </span>
 
           {/* NAME */}
-          <h1 className="text-3xl font-bold mt-2">
+          <h1 className="
+            mt-2 text-2xl sm:text-3xl
+            font-bold text-gray-900
+          ">
             {product.name}
           </h1>
 
           {/* RATING */}
-          <p className="text-yellow-500 mt-2">
-            {/* ★★★★☆ (4.2/5) */}
-            {product.rating}
+          <p className="mt-2 text-yellow-500 text-sm">
+            ⭐ {product.rating} / 5
           </p>
 
           {/* PRICE */}
-          <p className="text-3xl font-bold text-green-600 mt-4">
+          <p className="
+            mt-4 text-3xl font-extrabold
+            text-green-600
+          ">
             ₹{product.price}
           </p>
 
           {/* DESCRIPTION */}
-          <p className="text-gray-600 mt-4 leading-relaxed">
-            {/* This is a high-quality {product.name} designed for excellent
-            performance and long-term reliability. Perfect for everyday use. */}
+          <p className="
+            mt-4 text-gray-600
+            text-sm sm:text-base
+            leading-relaxed
+          ">
             {product.description}
           </p>
 
           {/* QUANTITY */}
-          <div className="mt-6 flex items-center gap-3">
-            <label className="font-medium">Quantity:</label>
+          <div className="mt-6 flex items-center gap-4">
+            <span className="font-medium text-sm">
+              Quantity
+            </span>
             <select
               value={qty}
               onChange={e => setQty(Number(e.target.value))}
-              className="border p-2 rounded"
+              className="
+                border rounded-lg px-4 py-2
+                focus:outline-none focus:ring-2 focus:ring-black
+              "
             >
               {[1,2,3,4,5].map(n => (
                 <option key={n} value={n}>{n}</option>
@@ -86,20 +111,49 @@ export default function ProductDetail() {
             </select>
           </div>
 
-          {/* ADD TO CART */}
-          <button
-            onClick={() => addToCart({ ...product, qty })}
-            className="mt-6 w-full bg-black text-white py-3 rounded-lg
-                       hover:bg-gray-800 transition"
-          >
-            Add to Cart
-          </button>
+          {/* ACTION BUTTONS */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+
+            <button
+              onClick={() => addToCart({ ...product, qty })}
+              className="
+                w-full sm:w-auto
+                px-8 py-3
+                bg-black text-white
+                rounded-xl font-semibold
+                hover:bg-gray-800
+                active:scale-95
+                transition
+              "
+            >
+              Add to Cart
+            </button>
+
+            <Link
+              to="/cart"
+              className="
+                w-full sm:w-auto
+                text-center
+                px-8 py-3
+                border border-black
+                rounded-xl font-semibold
+                hover:bg-black hover:text-white
+                transition
+              "
+            >
+              Go to Cart
+            </Link>
+
+          </div>
 
           {/* DELIVERY INFO */}
-          <div className="mt-6 text-sm text-gray-500">
-            ✔ Free Delivery <br />
-            ✔ 7 Days Replacement <br />
-            ✔ Secure Payment
+          <div className="
+            mt-8 text-sm text-gray-500
+            space-y-1
+          ">
+            <p>✔ Free Delivery</p>
+            <p>✔ 7 Days Replacement</p>
+            <p>✔ Secure Payment</p>
           </div>
 
         </div>

@@ -15,46 +15,32 @@ export default function Products() {
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // FILTER + SORT LOGIC
+  // FILTER + SORT
   let filteredProducts = productsData
-    .filter(product =>
-      category === "all" ? true : product.category === category
-    )
-    .filter(product =>
-      product.name.toLowerCase().includes(search.toLowerCase())
-    );
+    .filter(p => category === "all" || p.category === category)
+    .filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
 
   if (sort === "low") {
-    filteredProducts = [...filteredProducts].sort(
-      (a, b) => a.price - b.price
-    );
+    filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
   }
 
   if (sort === "high") {
-    filteredProducts = [...filteredProducts].sort(
-      (a, b) => b.price - a.price
-    );
+    filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
   }
 
-  // RESET PAGE WHEN FILTER CHANGES
+  // RESET PAGE ON FILTER CHANGE
   useEffect(() => {
     setCurrentPage(1);
   }, [search, category, sort, itemsPerPage]);
 
-  // PAGINATION LOGIC
-  const totalPages = Math.ceil(
-    filteredProducts.length / itemsPerPage
-  );
-
+  // PAGINATION
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
   const paginatedProducts = filteredProducts.slice(
     startIndex,
-    endIndex
+    startIndex + itemsPerPage
   );
 
-  // CLEAR FILTERS
   const clearFilters = () => {
     setSearch("");
     setCategory("all");
@@ -62,37 +48,38 @@ export default function Products() {
   };
 
   return (
-    <div className="p-6 md:p-10 max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
 
-      {/* PAGE TITLE */}
-      <h1 className="text-4xl font-bold text-center mb-10">
+      {/* TITLE */}
+      <h1 className="text-3xl sm:text-4xl font-bold text-center mb-10">
         Explore Products
       </h1>
 
       {/* FILTER BAR */}
-      <div className="bg-white shadow-md rounded-xl p-4 mb-10
-                      flex flex-col md:flex-row gap-4 items-center">
+      <div className="
+        bg-white shadow-md rounded-xl p-4 mb-10
+        grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4
+      ">
 
         {/* SEARCH */}
-        <div className="flex items-center border rounded-lg px-3 py-2
-                        w-full md:w-1/4">
+        <div className="flex items-center border rounded-lg px-3 py-2">
           <span className="text-gray-400 mr-2">🔍</span>
           <input
             type="text"
             placeholder="Search products..."
             className="w-full outline-none"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
           />
         </div>
 
         {/* CATEGORY */}
         <select
-          className="border rounded-lg px-3 py-2 w-full md:w-1/6"
+          className="border rounded-lg px-3 py-2"
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          onChange={e => setCategory(e.target.value)}
         >
-          <option value="all">All</option>
+          <option value="all">All Categories</option>
           <option value="mobile">Mobile</option>
           <option value="laptop">Laptop</option>
           <option value="accessories">Accessories</option>
@@ -100,30 +87,20 @@ export default function Products() {
 
         {/* SORT */}
         <select
-          className="border rounded-lg px-3 py-2 w-full md:w-1/6"
+          className="border rounded-lg px-3 py-2"
           value={sort}
-          onChange={(e) => setSort(e.target.value)}
+          onChange={e => setSort(e.target.value)}
         >
-          <option value="">Sort Price</option>
+          <option value="">Sort by Price</option>
           <option value="low">Low → High</option>
           <option value="high">High → Low</option>
         </select>
 
-        {/* CLEAR */}
-        <button
-          onClick={clearFilters}
-          className="border border-red-500 text-red-500
-                     px-4 py-2 rounded-lg
-                     hover:bg-red-500 hover:text-white transition"
-        >
-          Clear Filter
-        </button>
-        </div>
         {/* ITEMS PER PAGE */}
         <select
-          className="border rounded-lg px-3 py-2 w-25 md:w-1/6 "
+          className="border rounded-lg px-3 py-2"
           value={itemsPerPage}
-          onChange={(e) => setItemsPerPage(Number(e.target.value))}
+          onChange={e => setItemsPerPage(Number(e.target.value))}
         >
           <option value={4}>4 / page</option>
           <option value={8}>8 / page</option>
@@ -131,11 +108,27 @@ export default function Products() {
           <option value={16}>16 / page</option>
         </select>
 
+        {/* CLEAR */}
+        <button
+          onClick={clearFilters}
+          className="
+            border border-red-500 text-red-500
+            rounded-lg px-4 py-2
+            hover:bg-red-500 hover:text-white
+            transition
+          "
+        >
+          Clear
+        </button>
+      </div>
+
       {/* PRODUCTS GRID */}
       {paginatedProducts.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2
-                          md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="
+            grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+            gap-8
+          ">
             {paginatedProducts.map(product => (
               <ProductCard
                 key={product.id}
@@ -147,9 +140,8 @@ export default function Products() {
 
           {/* PAGINATION */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-12">
+            <div className="flex flex-wrap justify-center gap-2 mt-12">
 
-              {/* PREV */}
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(p => p - 1)}
@@ -159,24 +151,30 @@ export default function Products() {
                 ← Prev
               </button>
 
-              {/* PAGE NUMBERS */}
-              {[...Array(totalPages)].map((_, index) => {
-                const page = index + 1;
-                return (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`px-4 py-2 border rounded-lg
-                      ${currentPage === page
-                        ? "bg-black text-white"
-                        : "hover:bg-gray-100"}`}
-                  >
-                    {page}
-                  </button>
-                );
-              })}
+              {/* PAGE NUMBERS (MAX 5 SHOWN) */}
+              {[...Array(totalPages)]
+                .slice(
+                  Math.max(0, currentPage - 3),
+                  Math.min(totalPages, currentPage + 2)
+                )
+                .map((_, i) => {
+                  const page =
+                    Math.max(1, currentPage - 2) + i;
 
-              {/* NEXT */}
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-4 py-2 border rounded-lg
+                        ${currentPage === page
+                          ? "bg-black text-white"
+                          : "hover:bg-gray-100"}`}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(p => p + 1)}
