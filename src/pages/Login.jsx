@@ -41,7 +41,7 @@ export default function Login({ setIsLoggedIn }) {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           alt="E-Shop"
-          src="../public/e-com.jpg"
+          src="/e-com.jpg"
           className="mx-auto h-20 w-auto rounded-lg"
         />
 
