@@ -7,6 +7,7 @@ export default function Products() {
   const { addToCart } = useCart();
 
   // FILTER STATES
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("");

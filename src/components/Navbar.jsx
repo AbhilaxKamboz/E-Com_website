@@ -42,6 +42,7 @@ export default function Navbar({ setIsLoggedIn }) {
           E<span className="text-blue-400">-Shop</span>
         </Link>
 
+
         {/* DESKTOP MENU */}
         <div className="hidden md:flex gap-8 items-center text-sm font-medium">
           <Link to="/home" className={`flex items-center gap-1 ${isActive("/home")}`}>
